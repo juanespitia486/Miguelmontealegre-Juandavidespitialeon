@@ -113,4 +113,4 @@ crear un bloque es empaquetar la nueva información junto con el rastro del bloq
 
 ## ¿Qué tipo de encriptación se maneja en blockchain? Y ¿Cómo funciona?
 
-En blockchain hay mas de un tipo de encriptacion las cuales son funciones hash criptograficas que funciona convirtiendo cualquier informacion en una formula matematica compleja  a con cierta cantidad de caracteres fijas y criptograficas de clave publicas y privadas en la que se generan dos llaves matematicas conectadas entre si  
+En blockchain hay mas de un tipo de encriptacion, las cuales son: funciones hash criptograficas que funciona convirtiendo cualquier informacion en una formula matematica compleja con cierta cantidad de caracteres fijas y criptograficas de clave publica y privada en la que se generan dos llaves matematicas conectadas entre si para verificar nuestra identidad y asegurar los mensajes
