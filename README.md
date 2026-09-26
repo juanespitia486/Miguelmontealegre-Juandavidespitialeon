@@ -207,3 +207,35 @@ graph TD
         L2["Capa 2: Enlace de Datos<br>• Uso: Controla errores locales y acceso al medio.<br>• Elementos: Direcciones MAC y Switches."]
         L1["Capa 1: Física<br>• Uso: Transmite bits mediante señales físicas.<br>• Elementos: Cables de red, fibra óptica y ondas Wi-Fi."]
     end
+```
+---
+## ¿La herramienta Github y la herramienta Git en qué parte del modelo OSI estaría?.
+cumplen varias cosas de varias capas pero estarian en la capa 7 porque son herramientas de sotware que interactuan con omandos locales en la terminal y funciona como gestor de archivos
+
+```mermaid
+graph TD
+    %% Título del Diagrama
+    subgraph OSI_L7 [Capa 7: Capa de Aplicación]
+        direction TB
+        Git["Herramienta Git<br>• Comandos locales (commit, status)<br>• Gestor de archivos e historial"] --> 
+        GitHub["Plataforma GitHub<br>• Interfaz Web / Repositorio remoto<br>• Colaboración y control de versiones"]
+    end
+
+    %% Capas de transporte y red subyacentes
+    subgraph OSI_L4_L3 [Capas de Transporte y Red]
+        TCP["Protocolo TCP / UDP<br>• Conexión extremo a extremo"] --> 
+        IP["Protocolo IP y Enrutamiento<br>• Direccionamiento de paquetes"]
+    end
+
+    %% Capas físicas y de enlace
+    subgraph OSI_L2_L1 [Capas Inferiores: Enlace y Física]
+        Data["Tramas y Medios Físicos<br>• Wi-Fi, Fibra Óptica, Cables de Red"]
+    end
+
+    %% Conexiones entre componentes
+    GitHub --> TCP
+    TCP --> IP
+    IP --> Data
+
+
+
