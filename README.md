@@ -176,6 +176,9 @@ Capa de Aplicación:
 
 Qué hace: Es la capa más cercana al usuario final. Es la que interactúa directamente con el software que utilizas (como tu navegador web, el cliente de correo electrónico o aplicaciones de chat) mediante protocolos como HTTP, FTP o SMTP.
 
+# Mapa Conceptual del Modelo OSI
+
+```mermaid
 graph TD
     %% Nodo Principal
     OSI["Modelo OSI<br>(Interconexión de Sistemas Abiertos)"] --> L7
@@ -204,5 +207,3 @@ graph TD
         L2["Capa 2: Enlace de Datos<br>• Uso: Controla errores locales y acceso al medio.<br>• Elementos: Direcciones MAC y Switches."]
         L1["Capa 1: Física<br>• Uso: Transmite bits mediante señales físicas.<br>• Elementos: Cables de red, fibra óptica y ondas Wi-Fi."]
     end
-
-
