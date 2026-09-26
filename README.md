@@ -116,12 +116,12 @@ crear un bloque es empaquetar la nueva información junto con el rastro del bloq
 En blockchain hay mas de un tipo de encriptacion, las cuales son: funciones hash criptograficas que funciona convirtiendo cualquier informacion en una formula matematica compleja con cierta cantidad de caracteres fijas y criptograficas de clave publica y privada en la que se generan dos llaves matematicas conectadas entre si para verificar nuestra identidad y asegurar los mensajes
 
 ---
-##¿Cómo sería el funcionamiento de una cadena de bloques en la transacción bancaria?
+## ¿Cómo sería el funcionamiento de una cadena de bloques en la transacción bancaria?
 
 una transacción bancaria con blockchain practicamente funciona como un libro de contabilidad digital compartido y ultra seguro entre varios bancos , donde nadie puede borrar ni modificar lo que ya se escribió
 
 ---
-##¿Cómo se comporta blockchain ante la computación cuántica?
+## ¿Cómo se comporta blockchain ante la computación cuántica?
 
 es una amenaza latente porque estas computadoras cuanticas podrian decifrar con relativa facilidad nuestras claves por ejemplo las claves privadas a partir de nuestra clave publica y aunque el sha-256 se salva un poco ms igualmente no esta para nada protgido contra estas computadoras las cuales con la guia correcta podrian llegar a decifrarlas o reducir drasticamente su efectividad, ya se estan trabajando contra medidas conocidas como "post-cuantica" para que no colapse todo el sistema
 
@@ -139,4 +139,70 @@ la seguridad que utiliza no es una tradional que suelen ser formulas matematicas
 | **Funciones Hash Criptográficas** *(Ej. SHA-256)* | Matemáticas y compresión de datos | Convierte cualquier información en una fórmula matemática compleja con una cantidad fija de caracteres (un hash único). | Sellar y unir los bloques de una cadena; detectar al instante si alguien alteró un mensaje. |
 | **Criptografía de Clave Pública / Privada** | Matemáticas y pares de llaves | Genera dos llaves conectadas entre sí: una privada (secreta para firmar) y una pública (visible para verificar). | Verificar la identidad de los usuarios y asegurar que los mensajes o transacciones sean legítimos. |
 | **Distribución de Claves Cuánticas (QKD)** *(Seguridad Cuántica)* | Física cuántica y principios de la luz | Utiliza fotones y el principio de medición: si un hacker intenta observar o espiar la información, altera su estado físico y destruye los datos. | Ofrecer una seguridad inviolable en las redes del futuro, detectando espías de forma instantánea sin depender de contraseñas. |
+
+---
+<img width="200" height="400" alt="image" src="https://github.com/user-attachments/assets/08d8c6f8-cff3-48fb-b72e-16324e448437" />
+
+https://canva.link/d3gwdsp0a5uw8ji
+
+---
+
+# 2
+Capa Física:
+
+Qué hace: Se encarga de los aspectos puramente físicos y eléctricos. Transmite los bits de información en forma de señales eléctricas (cables de red), ondas de radio (Wi-Fi) o pulsos de luz (fibra óptica).
+
+Capa de Enlace de Datos:
+
+Qué hace: Organiza los bits en paquetes llamados tramas, controla el acceso al medio físico y corrige errores básicos que puedan ocurrir en el cable o conexión directa entre dos dispositivos vecinos (aquí operan las direcciones MAC y los switches).
+
+Capa de Red:
+
+Qué hace: Se encarga del direccionamiento y el enrutamiento. Busca el mejor camino posible para que los datos viajen desde el dispositivo de origen hasta el destino a través de múltiples redes conectadas (aquí operan las direcciones IP y los routers).
+
+Capa de Transporte:
+
+Qué hace: Garantiza que los datos lleguen de forma correcta, ordenada y sin pérdidas de extremo a extremo. Divide los mensajes grandes en paquetes más pequeños y verifica si llegaron bien (aquí destacan protocolos como TCP y UDP).
+
+Capa de Sesión:
+
+Qué hace: Abre, mantiene y cierra la conexión o sesión de comunicación entre dos aplicaciones en dispositivos distintos, asegurando que se mantenga activa mientras dura el intercambio.
+
+Capa de Presentación:
+
+Qué hace: Se encarga de la traducción de los datos. Traduce el formato de la información para que la aplicación pueda entenderla, aplicando también funciones de cifrado/descifrado (seguridad) y compresión de archivos.
+
+Capa de Aplicación:
+
+Qué hace: Es la capa más cercana al usuario final. Es la que interactúa directamente con el software que utilizas (como tu navegador web, el cliente de correo electrónico o aplicaciones de chat) mediante protocolos como HTTP, FTP o SMTP.
+
+graph TD
+    %% Nodo Principal
+    OSI["Modelo OSI<br>(Interconexión de Sistemas Abiertos)"] --> L7
+    OSI --> L6
+    OSI --> L5
+    OSI --> L4
+    OSI --> L3
+    OSI --> L2
+    OSI --> L1
+
+    %% Capas Superiores (Software / Usuario)
+    subgraph Software [Capas Superiores: Interfaz y Datos]
+        L7["Capa 7: Aplicación<br>• Uso: Interactúa directamente con el software y el usuario final.<br>• Protocolos: HTTP, FTP, SMTP."]
+        L6["Capa 6: Presentación<br>• Uso: Traduce, cifra/descifra y comprime los datos.<br>• Función: Asegura que la info sea legible para la app."]
+        L5["Capa 5: Sesión<br>• Uso: Abre, mantiene y cierra la conexión entre aplicaciones.<br>• Función: Controla el intercambio de diálogos."]
+    end
+
+    %% Capas de Transporte y Red
+    subgraph Transporte [Capa de Conectividad y Ruta]
+        L4["Capa 4: Transporte<br>• Uso: Garantiza entrega correcta extremo a extremo.<br>• Protocolos: TCP y UDP (Control de errores/orden)."]
+        L3["Capa 3: Red<br>• Uso: Enrutamiento y direccionamiento lógico.<br>• Elementos: Direcciones IP y Routers (Mejor ruta)."]
+    end
+
+    %% Capas Físicas (Hardware / Conexión)
+    subgraph Hardware [Capas Inferiores: Hardware y Transmisión]
+        L2["Capa 2: Enlace de Datos<br>• Uso: Controla errores locales y acceso al medio.<br>• Elementos: Direcciones MAC y Switches."]
+        L1["Capa 1: Física<br>• Uso: Transmite bits mediante señales físicas.<br>• Elementos: Cables de red, fibra óptica y ondas Wi-Fi."]
+    end
+
 
