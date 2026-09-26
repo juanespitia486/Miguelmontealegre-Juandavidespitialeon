@@ -127,3 +127,7 @@ es una amenaza latente porque estas computadoras cuanticas podrian decifrar con 
 
 ---
 
+## ¿Qué es la computación cuántica? Y ¿Qué tipo de seguridad utiliza?.
+
+la computacion cuantica es la superposicion del codigo binario que utilizamos en las computadoras normales es decir en lugar de leer 0 y 1 u no por uno los lee al mismo tiempo, digamos tenemos una bliblioteca infinita, a una computadora normal le preguntamos algo y va a leer todos los libros uno por uno en cambio una computadora cuantica lee toda la biblioteca al mismo tiempo 
+
