@@ -1,6 +1,5 @@
 # Miguelmontealegre-Juandavidespitialeon
-**1** 
-en el siguiente codigo simula dos servidores independientes ( A y B ) que actúan como una red descentralizada básica. Cada mensaje enviado se "empaqueta" en un bloque conectado por SHA-256. Cuando el servidor A recibe un mensaje, crea el bloque y le copia inmediatamente al servidor B para mantenerlos con la misma informacion
+## 1:  en el siguiente codigo simula dos servidores independientes ( A y B ) que actúan como una red descentralizada básica. Cada mensaje enviado se "empaqueta" en un bloque conectado por SHA-256. Cuando el servidor A recibe un mensaje, crea el bloque y le copia inmediatamente al servidor B para mantenerlos con la misma informacion
 
 ```
 import hashlib
@@ -105,6 +104,6 @@ if __name__ == '__main__':
     print(requests.get('http://localhost:5001/cadena').json())
 ```
 ---
-**¿Cómo se crea un bloque?**
+##¿Cómo se crea un bloque?##
 crear un bloque es empaquetar la nueva información junto con el rastro del bloque anterior y sellarlo con una firma criptográfica (SHA-256) para que nadie lo pueda alterar sin que se note como en palabras mas sencillas es como escribir una receta y la primera pagina ponerle (5) y la siguiente hoja iniciarla con ese digito o caracter y asi sucesivamente con cada pagina
 ---
