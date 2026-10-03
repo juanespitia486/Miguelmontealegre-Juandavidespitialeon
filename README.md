@@ -334,3 +334,75 @@ el éxito o fracaso de la operación (Investigar los conceptos).
 
 #### 4. ¿Entre git y github se utiliza algún elemento criptográfico para enviar la información de manera segura? Investigue y justifique su respuesta.
 * **Respuesta:** Sí, se utilizan elementos criptográficos. Cuando se interactúa mediante HTTPS, se emplea el protocolo **TLS/SSL** (Transport Layer Security) para cifrar de extremo a extremo el tráfico de la red, asegurando la confidencialidad e integridad de los datos. Adicionalmente, si se utiliza autenticación por SSH, se emplean **pares de llaves criptográficas** (pública y privada) para autenticar de forma segura al desarrollador sin necesidad de exponer credenciales en texto plano[cite: 2].
+
+### Paso 2: Establecimiento de la conexión para el push
+
+#### 1. Antes de enviar los datos, Git (a través de su capa HTTP) necesita abrir una conexión fiable. ¿Qué protocolo de la capa de transporte se encarga de esto y qué mecanismo utiliza para establecer la conexión? Describir brevemente el "three-way handshake".
+* **Protocolo de la capa de transporte:** El protocolo encargado de proporcionar una conexión fiable orientada a conexión es **TCP** (Transmission Control Protocol)[cite: 3].
+* **Mecanismo de establecimiento:** Utiliza la salutación de tres vías (*three-way handshake*)[cite: 3].
+* **Descripción breve del "three-way handshake":**
+  1. **SYN:** El cliente (tu equipo) envía un segmento con la bandera `SYN` (sincronizar) al servidor para iniciar la conexión e indicar su número de secuencia inicial[cite: 3].
+  2. **SYN-ACK:** El servidor (GitHub) responde con un segmento que contiene las banderas `SYN` y `ACK` (reconocimiento), acusando recibo de la solicitud del cliente y sincronizando a su vez su propio número de secuencia[cite: 3].
+  3. **ACK:** El cliente envía de vuelta un segmento con la bandera `ACK`, confirmando que ha recibido la respuesta del servidor[cite: 3]. A partir de este momento, la conexión bidireccional segura y fiable queda establecida[cite: 3].
+
+---
+
+#### 2. Si se quisiera observar en tiempo real los segmentos TCP intercambiados, ¿qué herramienta usaría y qué filtro aplicarías para ver solo el tráfico hacia/desde GitHub? (Asumir que ya conoces la IP de GitHub).
+* **Herramienta:** **Wireshark** (capturador y analizador de paquetes de red)[cite: 3].
+* **Filtro de Wireshark:** `ip.addr == <IP_DE_GITHUB> && tcp` (reemplazando `<IP_DE_GITHUB>` por la dirección IP real del servidor de GitHub)[cite: 3].
+
+---
+
+#### 3. Identifica en la cabecera TCP los puertos origen y destino típicos para esta conexión. ¿Qué capa del modelo OSI gestiona estos puertos?
+* **Puertos en la cabecera TCP:**
+  * **Puerto de destino:** `443` (puerto estándar utilizado para tráfico web seguro mediante HTTPS).
+  * **Puerto de origen:** Un puerto dinámico o efímero (generalmente superior al `1024`, asignado de forma aleatoria por el sistema operativo de tu equipo para la sesión actual).
+* **Capa del modelo OSI que los gestiona:** La **Capa de Transporte (Capa 4)**, ya que utiliza los puertos para multiplexar las conexiones de diferentes aplicaciones en un mismo equipo[cite: 3].
+
+### Paso 3: Encapsulamiento y enrutamiento de los datos
+
+#### 1. Describir el proceso de encapsulamiento desde que los datos salen de la aplicación Git hasta que se convierten en una trama Ethernet que sale por la tarjeta de red. Mencionar las unidades de datos (PDU) en cada capa: ¿Qué nombre reciben en la capa de aplicación? ¿Y en la de transporte? ¿Y en la de red? ¿Y en la de enlace?
+* **Proceso de encapsulamiento:** Los datos del commit generado por Git se transforman a medida que descienden por las capas del modelo OSI, agregando cabeceras de control en cada nivel hasta prepararse para el medio físico[cite: 4].
+* **Unidades de Datos (PDU) por capa:**
+  * **Capa de Aplicación (Capa 7):** Datos / Mensajes (peticiones HTTPS y objetos de Git)[cite: 4].
+  * **Capa de Transporte (Capa 4):** Segmentos (TCP)[cite: 4].
+  * **Capa de Red (Capa 3):** Paquetes / Datagramas (IP)[cite: 4].
+  * **Capa de Enlace de Datos (Capa 2):** Tramas (Ethernet)[cite: 4].
+
+---
+
+#### 2. El paquete IP atraviesa a través de múltiples routers hasta llegar a los servidores de GitHub. Si uno de esos routers está congestionado y se empieza a descartar paquetes, ¿cómo se vería afectado el "git push"? ¿Qué mecanismo de TCP se activaría para mitigar esto? ¿Qué comando de red te permitiría identificar en qué salto se están perdiendo paquetes?
+* **Afectación en el `git push`:** La pérdida de paquetes provoca retrasos, retransmisiones y, si la congestión es severa, la interrupción abrupta de la conexión con errores de tiempo de espera (*timeout*)[cite: 4].
+* **Mecanismo de TCP para mitigar:** El **control de congestión** y la **retransmisión de segmentos** mediante acuses de recibo selectivos (*Selective Acknowledgments* - SACK), ajustando además la ventana de congestión (*congestion window*) para regular el flujo de envío[cite: 4].
+* **Comando de red para identificar el salto:** El comando **`pathping`** (en Windows) o **`tracert`** (analizando la pérdida de paquetes por cada salto)[cite: 4].
+
+---
+
+#### 3. En la cabecera IP, ¿qué campo evita que el paquete dé vueltas indefinidamente por la red? Explicar su funcionamiento.
+* **Campo de la cabecera IP:** El campo **TTL (Time to Live / Tiempo de vida)** en IPv4 (o *Hop Limit* en IPv6)[cite: 4].
+* **Funcionamiento:** Es un contador numérico que se decrementa en uno cada vez que un router procesa y reenvía el paquete. Si el valor del TTL llega a cero antes de alcanzar su destino, el router descarta el paquete y envía un mensaje ICMP de error de tiempo excedido (*Time Exceeded*), evitando así bucles de enrutamiento infinitos en la red[cite: 4].
+
+### Paso 4: Confirmación y fin de la comunicación
+
+#### 1. ¿Qué tipo de mensaje TCP utiliza GitHub para confirmar la recepción correcta de los datos? ¿Cómo se relaciona esto con el concepto de "pérdida de paquetes" y "fiabilidad"?
+* **Tipo de mensaje TCP:** GitHub (y el sistema operativo) utiliza **segmentos TCP con la bandera ACK (Acknowledgment)** y números de secuencia incrementados para confirmar la recepción de los bytes de datos[cite: 5].
+* **Relación con pérdida y fiabilidad:** TCP garantiza la **fiabilidad** mediante el uso de acuses de recibo y temporizadores (*timers*)[cite: 5]. Si un segmento se pierde en la red y no se recibe su respectivo `ACK` dentro del tiempo establecido, el emisor detecta la **pérdida de paquetes** y procede a retransmitir la información hasta asegurar que llegue correctamente al destino[cite: 5].
+
+---
+
+#### 2. Una vez que el push ha terminado, la conexión se cierra. Mencionar cómo se realiza este cierre ordenado en TCP.
+* El cierre ordenado se realiza mediante un intercambio de banderas conocido como **Four-way handshake (cierre de cuatro vías)**[cite: 5]:
+  1. **FIN:** El equipo cliente envía un segmento con la bandera `FIN` indicando que ha terminado de enviar datos[cite: 5].
+  2. **ACK:** El servidor GitHub responde con un `ACK` confirmando la recepción de la solicitud de cierre[cite: 5].
+  3. **FIN:** El servidor GitHub, al estar también listo para cerrar su lado de la conexión, envía su propio segmento `FIN`[cite: 5].
+  4. **ACK:** El cliente responde con un `ACK` final, cerrando completamente la sesión de forma simétrica y ordenada[cite: 5].
+
+---
+
+#### 3. Si usted fuera administrador de la red y quisiera monitorear el tráfico generado por tu push usando SNMP, ¿qué métricas podrías observar en el agente SNMP del router de salida? (Por ejemplo: bytes transmitidos/recibidos, paquetes descartados, etc.). ¿Qué versión de SNMP usaría usted si necesita que estas consultas fueran cifradas?
+* **Métricas a observar:** 
+  * Bytes y paquetes totales transmitidos y recibidos (`ifInOctets`, `ifOutOctets`, `ifInUcastPkts`, `ifOutUcastPkts`)[cite: 5].
+  * Paquetes descartados por congestión o errores (`ifInDiscards`, `ifOutDiscards`)[cite: 5].
+  * Errores de transmisión (`ifInErrors`, `ifOutErrors`) y la utilización actual de ancho de banda en la interfaz[cite: 5].
+* **Versión de SNMP requerida:** Se debe utilizar **SNMPv3**, ya que es la única versión que incorpora de manera nativa mecanismos robustos de seguridad, autenticación y **cifrado de datos** (utilizando protocolos como DES, AES) para proteger las consultas de administración[cite: 5].
+
