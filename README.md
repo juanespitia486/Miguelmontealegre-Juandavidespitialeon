@@ -243,6 +243,56 @@ entorno? Y ¿cómo se maneja el tema de criptografía?
 
 pues con total sinceridad no es algo que se revise constantemente, de hecho en lo personal nunca me lo han enseñado en clase, practicamente es lo mismo que me enseñaron en mi hogar, y si se llega a visualizar es por un tecnico que viene a reparar alguna falla masiva, pero es muy poco frecuente
 
+---
 
+Los estudiantes de compensar son desarrolladores que trabajan en un proyecto alojado en GitHub y precisamente
+acaban de finalizar una nueva funcionalidad en la máquina local y proceden a ejecutar los siguientes comandos para
+subir los cambios al repositorio remoto:
+
+<img width="333" height="76" alt="image" src="https://github.com/user-attachments/assets/dc83090a-b90a-4d5f-b924-5475b9d549f3" />
+
+##1 capa del modelo OSI involucrada principalmente en esa acción.
+
+se utiliza la capa 7 porque interactuar con el sotware y el usuario y la capa 3 para verificar el alcance 
+
+##2 Los protocolos y estructuras de datos (tramas, paquetes, segmentos) que
+intervienen
+* **Ethernet** (Capa 2)
+* **IP (IPv4 / IPv6)** (Capa 3)
+* **ICMP** (Capa 3)
+* **TCP** (Capa 4)
+* **UDP** (Capa 4)
+* **DNS** (Capa 7)
+* **TLS / SSL** (Capas 5 y 6)
+* **HTTP / HTTPS** (Capa 7)
+* **Git Smart Protocol** (Capa 7)
+
+#### Estructuras de datos
+* **Tramas** (Capa de Enlace / Capa 2)
+* **Paquetes / Datagramas** (Capa de Red / Capa 3)
+* **Segmentos** (TCP) y **Datagramas** (UDP) (Capa de Transporte / Capa 4)
+* **Mensajes / Objetos de Aplicación** (peticiones/respuestas HTTP, consultas DNS y archivos *packfile* de Git en la Capa de Aplicación / Capa 7)
+
+##3 qué comando(s) de red podrían
+utilizar para verificar o diagnosticar problemas en ese paso específico.
+
+### Comandos de red y herramientas de diagnóstico para Git Push
+
+#### 1. Verificación de Resolución de Nombres (DNS)
+* **`nslookup github.com`**: Permite consultar al servidor DNS configurado para verificar si traduce correctamente el dominio de GitHub a su dirección IP correspondiente.
+
+#### 2. Verificación de Conectividad General y Red (Capa 3 / ICMP)
+* **`ping github.com`**: Envía paquetes ICMP Echo Request para medir la latencia y la pérdida de paquetes hacia el servidor de GitHub.
+* **`tracert github.com`** o **`pathping github.com`**: Muestran la ruta exacta (saltos de los routers intermedios) que siguen los paquetes hasta llegar a los servidores de GitHub, útil para identificar en qué nodo de la red se producen cortes o retrasos.
+
+#### 3. Verificación de Conexiones Activas y Puertos (Capa 4 / TCP)
+* **`netstat -ano`** o **`netstat -b`**: Muestran las conexiones de red activas y los puertos en uso en tu máquina para revisar si el proceso mantiene una conexión establecida (`ESTABLISHED`) en el puerto estándar de HTTPS (`443`).
+
+#### 4. Diagnóstico Avanzado con Filtros de Wireshark
+* **`dns`**: Filtro para visualizar únicamente las peticiones y respuestas de resolución de nombres.
+* **`tcp.port == 443`** o **`tls`**: Filtra todo el tráfico cifrado de HTTPS, permitiéndote ver el intercambio del *TCP Handshake*, la negociación de seguridad (TLS) y los paquetes transmitidos durante el `git push`.
+
+##4 Relacionar los conceptos de teletráfico (latencia, pérdida de paquetes, throughput) con
+el éxito o fracaso de la operación (Investigar los conceptos).
 
 
