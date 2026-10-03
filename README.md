@@ -406,3 +406,129 @@ el éxito o fracaso de la operación (Investigar los conceptos).
   * Errores de transmisión (`ifInErrors`, `ifOutErrors`) y la utilización actual de ancho de banda en la interfaz[cite: 5].
 * **Versión de SNMP requerida:** Se debe utilizar **SNMPv3**, ya que es la única versión que incorpora de manera nativa mecanismos robustos de seguridad, autenticación y **cifrado de datos** (utilizando protocolos como DES, AES) para proteger las consultas de administración[cite: 5].
 
+### Ejercicio en Clase: Sistema de Gestión y Análisis en Tiempo Real para Redes Convergentes (Cisco y Huawei)
+
+Para cumplir con los requerimientos del ejercicio en clase, se presenta a continuación una solución integrada en **Python** que engloba los cinco objetivos solicitados: generación de plantillas de configuración, simulación de un dashboard de disponibilidad/rendimiento, análisis de métricas QoS para voz/video, configuración de VLAN Voice y aplicación de ACLs para control de tráfico[cite: 6].
+
+#### Código en Python de la solución integral
+
+```python
+import time
+import random
+
+class GestorRedConvergente:
+    def __init__(self):
+        print("--- Inicializando Sistema de Gestión para Redes Convergentes ---")
+
+    # 1. Generar plantillas de configuración para switches y routers Cisco y Huawei
+    def generar_plantilla(self, vendor, tipo, nombre_interfaz, vlan_id=None):
+        vendor = vendor.lower()
+        if vendor == "cisco":
+            if tipo == "switch_access":
+                return f"""
+! Configuración Cisco Switch - Puerto de Acceso
+en
+conf t
+interface {nombre_interfaz}
+ switchport mode access
+ switchport access vlan {vlan_id}
+ spanning-tree portfast
+ no shutdown
+end
+"""
+            elif tipo == "router_subinterface":
+                return f"""
+! Configuración Cisco Router - Router-on-a-Stick (VLAN Voice)
+en
+conf t
+interface {nombre_interfaz}.{vlan_id}
+ encapsulation dot1Q {vlan_id} native
+ ip address 192.168.{vlan_id}.1 255.255.255.0
+ priority-queue out
+end
+"""
+        elif vendor == "huawei":
+            if tipo == "switch_access":
+                return f"""
+# Configuración Huawei Switch - Puerto de Acceso
+sys
+interface {nombre_interfaz}
+ port link-type access
+ port default vlan {vlan_id}
+ stp edged-port enable
+ quit
+"""
+            elif tipo == "router_subinterface":
+                return f"""
+# Configuración Huawei Router - Subinterfaz VLAN Voice
+sys
+interface {nombre_interfaz}.{vlan_id}
+ dot1q termination vid {vlan_id}
+ ip address 192.168.{vlan_id}.1 255.255.255.0
+ qos phb dscp ef
+ quit
+"""
+        return "Plantilla no soportada"
+
+    # 2. Visualizar dashboards de disponibilidad, rendimiento y eventos (Simulación en consola)
+    def visualizar_dashboard(self):
+        print("\n[DASHBOARD DE DISPONIBILIDAD Y RENDIMIENTO]")
+        print("-" * 50)
+        print(f"Disponibilidad de Red (Uptime): {random.uniform(99.5, 99.99):.2f}%")
+        print(f"Uso de CPU Promedio: {random.randint(12, 45)}%")
+        print(f"Uso de Memoria RAM: {random.randint(50, 78)}%")
+        print(f"Eventos / Alertas críticas últimas 24h: {random.randint(0, 2)}")
+        print("-" * 50)
+
+    # 3. Analizar tráfico de voz y video en tiempo real, incluyendo métricas de QoS
+    def analizar_qos_voz_video(self):
+        print("\n[ANÁLISIS DE QoS - VOZ Y VIDEO EN TIEMPO REAL]")
+        latencia = random.uniform(15.0, 45.0)
+        jitter = random.uniform(1.2, 5.8)
+        perdida = random.uniform(0.0, 0.8)
+        
+        print(f"Latencia (Delay): {latencia:.2f} ms (Objetivo < 150ms)")
+        print(f"Jitter (Variación): {jitter:.2f} ms (Objetivo < 30ms)")
+        print(f"Pérdida de Paquetes: {perdida:.2f}% (Objetivo < 1%)")
+        
+        if latencia < 50 and jitter < 15 and perdida < 1:
+            print("Estado de QoS: ÓPTIMO (Calidad de Voz y Video Alta)")
+        else:
+            print("Estado de QoS: DEGRADADO (Requiere revisión de priorización)")
+
+    # 4. Gestionar VLAN Voice y tráfico sensible al retardo
+    def gestionar_vlan_voice(self, vlan_voz=100):
+        print(f"\n[GESTIÓN DE VLAN VOICE - ID: {vlan_voz}]")
+        print("Aplicando marcado de CoS (Class of Service) 5 y DSCP EF (Expedited Forwarding)...")
+        print("Configurando prioridad estricta de cola (LLQ - Low Latency Queuing) para tráfico sensible al retardo.")
+
+    # 5. Aplicar ACLs para control de tráfico
+    def aplicar_acl(self, vendor, tipo_trafico):
+        vendor = vendor.lower()
+        print(f"\n[APLICACIÓN DE ACL PARA CONTROL DE TRÁFICO - {vendor.upper()}]")
+        if vendor == "cisco":
+            if tipo_trafico == "voz":
+                print("access-list 101 permit udp any any range 16384 32768")
+                print("access-list 101 permit ip any any established")
+            else:
+                print("access-list 100 deny ip any 192.168.1.0 0.0.0.255")
+                print("access-list 100 permit ip any any")
+        elif vendor == "huawei":
+            if tipo_trafico == "voz":
+                print("acl number 3001")
+                print(" rule permit udp source any destination any port-range 16384 32768")
+            else:
+                print("acl number 3000")
+                print(" rule deny ip destination 192.168.1.0 0.0.0.255")
+                print(" rule permit ip source any destination any")
+
+# Ejemplo de ejecución del sistema
+if __name__ == "__main__":
+    app = GestorRedConvergente()
+    
+    # 1. Generar plantilla Cisco
+    print(app.generar_plantilla("cisco", "switch_access", "GigabitEthernet0/1", 20))
+    
+    # 2. Visualizar dashboard
+    app.visual
+
