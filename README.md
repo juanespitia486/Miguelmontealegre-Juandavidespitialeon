@@ -251,11 +251,11 @@ subir los cambios al repositorio remoto:
 
 <img width="333" height="76" alt="image" src="https://github.com/user-attachments/assets/dc83090a-b90a-4d5f-b924-5475b9d549f3" />
 
-##1 capa del modelo OSI involucrada principalmente en esa acción.
+## 1 capa del modelo OSI involucrada principalmente en esa acción.
 
 se utiliza la capa 7 porque interactuar con el sotware y el usuario y la capa 3 para verificar el alcance 
 
-##2 Los protocolos y estructuras de datos (tramas, paquetes, segmentos) que
+## 2 Los protocolos y estructuras de datos (tramas, paquetes, segmentos) que
 intervienen
 * **Ethernet** (Capa 2)
 * **IP (IPv4 / IPv6)** (Capa 3)
@@ -273,8 +273,7 @@ intervienen
 * **Segmentos** (TCP) y **Datagramas** (UDP) (Capa de Transporte / Capa 4)
 * **Mensajes / Objetos de Aplicación** (peticiones/respuestas HTTP, consultas DNS y archivos *packfile* de Git en la Capa de Aplicación / Capa 7)
 
-##3 qué comando(s) de red podrían
-utilizar para verificar o diagnosticar problemas en ese paso específico.
+## 3 qué comando(s) de red podrían utilizar para verificar o diagnosticar problemas en ese paso específico.
 
 ### Comandos de red y herramientas de diagnóstico para Git Push
 
@@ -292,7 +291,46 @@ utilizar para verificar o diagnosticar problemas en ese paso específico.
 * **`dns`**: Filtro para visualizar únicamente las peticiones y respuestas de resolución de nombres.
 * **`tcp.port == 443`** o **`tls`**: Filtra todo el tráfico cifrado de HTTPS, permitiéndote ver el intercambio del *TCP Handshake*, la negociación de seguridad (TLS) y los paquetes transmitidos durante el `git push`.
 
-##4 Relacionar los conceptos de teletráfico (latencia, pérdida de paquetes, throughput) con
+## 4 Relacionar los conceptos de teletráfico (latencia, pérdida de paquetes, throughput) con
 el éxito o fracaso de la operación (Investigar los conceptos).
 
+#### 1. Latencia
+* **Concepto:** Es el tiempo que tardan los datos (paquetes) en viajar desde tu computadora hasta el servidor de GitHub y viceversa (*Round Trip Time* o RTT).
+* **Impacto en el éxito:** Una latencia baja permite que el *TCP Handshake* y la negociación de seguridad TLS se completen rápidamente, facilitando una subida fluida.
+* **Impacto en el fracaso:** Una latencia extremadamente alta supera los tiempos de espera (*timeouts*), interrumpiendo abruptamente la conexión y mostrando errores como `RPC failed; curl 56 OpenSSL SSL_read: Connection was reset`.
 
+#### 2. Pérdida de Paquetes
+* **Concepto:** Ocurre cuando uno o más paquetes de datos no llegan a su destino debido a congestión o fallos en la red.
+* **Impacto en el éxito:** Con una pérdida mínima, el protocolo TCP reordena y retransmite los paquetes de forma transparente, permitiendo que la operación finalice con éxito.
+* **Impacto en el fracaso:** Una tasa alta de pérdida destruye la estabilidad de TCP. Al enviar objetos pesados (*packfiles*), la saturación por retransmisiones constantes genera bloqueos y el fallo total de la transferencia.
+
+#### 3. Throughput (Rendimiento / Ancho de banda efectivo)
+* **Concepto:** Es la cantidad real de datos útiles que se transmiten exitosamente por la red en una unidad de tiempo.
+* **Impacto en el éxito:** Con un buen *throughput*, los commits pesados o con archivos extensos viajan rápidamente y GitHub confirma la recepción de inmediato (`main -> main`).
+* **Impacto en el fracaso:** Un *throughput* casi nulo hace que la transferencia avance muy lento, superando los límites de inactividad de la conexión y provocando que el servidor cierre el socket.
+
+  ---
+  ### Paso 1: Verificación de conectividad básica y resolución de nombres
+
+#### 1. ¿Qué comando usaría para verificar que su equipo tiene conectividad IP con los servidores de GitHub? Ejecutar ese comando y obtener respuesta. Explicar qué capa del modelo OSI está verificando este comando y qué protocolo utiliza.
+* **Comando:** `ping github.com`[cite: 2]
+* **Capa del modelo OSI:** Capa de Red (Capa 3).
+* **Protocolo:** Utiliza el protocolo **ICMP** (Internet Control Message Protocol), específicamente los mensajes de solicitud (*Echo Request*) y respuesta (*Echo Reply*).
+
+---
+
+#### 2. ¿Cómo obtiene su equipo la dirección IP de github.com? Describir el proceso y el protocolo involucrado. ¿Qué capa del OSI pertenece este protocolo? Si la resolución fallara, ¿qué comando usaría para diagnosticarlo manualmente?
+* **Proceso y protocolo:** El equipo consulta a un servidor DNS (Domain Name System) mediante el protocolo **DNS** para traducir el nombre de dominio legible (`github.com`) a su dirección IP numérica correspondiente[cite: 2].
+* **Capa del modelo OSI:** Capa de Aplicación (Capa 7).
+* **Comando de diagnóstico manual:** `nslookup github.com`[cite: 2]
+
+---
+
+#### 3. Imagina que el ping es exitoso pero con una latencia alta y variable. ¿Qué métrica de teletráfico está afectada (latencia, jitter, throughput)? ¿Qué podría influir en esto en tu futura operación de "git push"?
+* **Métrica afectada:** El **jitter** (variación en el tiempo de llegada de los paquetes) y la **latencia**[cite: 2].
+* **Influencia en el git push:** Una latencia alta y variable desestabiliza la conexión TCP, provocando retrasos en la transmisión de objetos pesados (*packfiles*) y pudiendo superar los tiempos de espera (*timeouts*), lo que causaría fallos de conexión o cortes abruptos durante la subida[cite: 2].
+
+---
+
+#### 4. ¿Entre git y github se utiliza algún elemento criptográfico para enviar la información de manera segura? Investigue y justifique su respuesta.
+* **Respuesta:** Sí, se utilizan elementos criptográficos. Cuando se interactúa mediante HTTPS, se emplea el protocolo **TLS/SSL** (Transport Layer Security) para cifrar de extremo a extremo el tráfico de la red, asegurando la confidencialidad e integridad de los datos. Adicionalmente, si se utiliza autenticación por SSH, se emplean **pares de llaves criptográficas** (pública y privada) para autenticar de forma segura al desarrollador sin necesidad de exponer credenciales en texto plano[cite: 2].
