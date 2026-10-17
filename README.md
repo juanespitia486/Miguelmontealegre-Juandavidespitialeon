@@ -9,8 +9,10 @@ import json
 from flask import Flask, request, jsonify
 import threading
 import requests
+```
 
 # --- 1. CLASE BLOCKCHAIN ---
+```
 class Blockchain:
     def __init__(self):
         self.chain = []
@@ -45,8 +47,9 @@ class Blockchain:
             self.chain.append(block)
             return True
         return False
-
+```
 # --- 2. CONFIGURACIÓN DE LOS SERVIDORES (NODO A y NODO B) ---
+```
 app_a = Flask("Servidor_A")
 app_b = Flask("Servidor_B")
 
@@ -84,8 +87,10 @@ def recibir_b():
 @app_b.route('/cadena', methods=['GET'])
 def cadena_b():
     return jsonify(blockchain_b.chain)
+```
 
 # --- 3. EJECUCIÓN SIMULADA ---
+```
 if __name__ == '__main__':
     # Levantar servidores en hilos separados
     threading.Thread(target=lambda: app_a.run(port=5000, debug=False, use_reloader=False), daemon=True).start()
@@ -104,6 +109,7 @@ if __name__ == '__main__':
     print("\nCadena Servidor B (Sincronizada):")
     print(requests.get('http://localhost:5001/cadena').json())
 ```
+
 ---
 ##  ¿Cómo se crea un bloque?
 
@@ -141,7 +147,7 @@ la seguridad que utiliza no es una tradional que suelen ser formulas matematicas
 | **Distribución de Claves Cuánticas (QKD)** *(Seguridad Cuántica)* | Física cuántica y principios de la luz | Utiliza fotones y el principio de medición: si un hacker intenta observar o espiar la información, altera su estado físico y destruye los datos. | Ofrecer una seguridad inviolable en las redes del futuro, detectando espías de forma instantánea sin depender de contraseñas. |
 
 ---
-<img width="200" height="400" alt="image" src="https://github.com/user-attachments/assets/08d8c6f8-cff3-48fb-b72e-16324e448437" />
+<img width="400" height="800" alt="image" src="https://github.com/user-attachments/assets/08d8c6f8-cff3-48fb-b72e-16324e448437" />
 
 https://canva.link/d3gwdsp0a5uw8ji
 
