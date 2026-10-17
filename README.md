@@ -244,9 +244,7 @@ pues con total sinceridad no es algo que se revise constantemente, de hecho en l
 
 ---
 
-Los estudiantes de compensar son desarrolladores que trabajan en un proyecto alojado en GitHub y precisamente
-acaban de finalizar una nueva funcionalidad en la máquina local y proceden a ejecutar los siguientes comandos para
-subir los cambios al repositorio remoto:
+### Los estudiantes de compensar son desarrolladores que trabajan en un proyecto alojado en GitHub y precisamenteacaban de finalizar una nueva funcionalidad en la máquina local y proceden a ejecutar los siguientes comandos para subir los cambios al repositorio remoto:
 
 <img width="333" height="76" alt="image" src="https://github.com/user-attachments/assets/dc83090a-b90a-4d5f-b924-5475b9d549f3" />
 
