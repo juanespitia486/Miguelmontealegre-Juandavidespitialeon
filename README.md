@@ -238,8 +238,7 @@ graph TD
     IP --> Data
 
 ```
-## ¿En su colegio cómo se visualiza el modelo OSI y el enfoque de ciberseguridad?, ¿Qué elementos describes de tu
-entorno? Y ¿cómo se maneja el tema de criptografía?
+## ¿En su colegio cómo se visualiza el modelo OSI y el enfoque de ciberseguridad?, ¿Qué elementos describes de tu entorno? Y ¿cómo se maneja el tema de criptografía?
 
 pues con total sinceridad no es algo que se revise constantemente, de hecho en lo personal nunca me lo han enseñado en clase, practicamente es lo mismo que me enseñaron en mi hogar, y si se llega a visualizar es por un tecnico que viene a reparar alguna falla masiva, pero es muy poco frecuente
 
